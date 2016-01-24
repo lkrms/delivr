@@ -1,6 +1,6 @@
 <?php
 
-// Change this to the URL of your installation of delivr.
+// Change this to the URL of your installation of delivr. If not defined, will be determined dynamically.
 define( "BASE_URL", "http://www.mydomain.com/delivr" );
 
 // If defined, download notifications will be sent to this email address.

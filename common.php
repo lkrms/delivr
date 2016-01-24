@@ -8,6 +8,50 @@ if ( ! defined( "APP_ROOT" ) )
 // load site-specific settings
 require_once ( APP_ROOT . "/config.php" );
 
+// determine whether or not we're using HTTPS
+define( "IS_SECURE_CONNECTION", ! empty( $_SERVER["HTTPS"] ) && $_SERVER["HTTPS"] != "off" );
+
+// if BASE_URL isn't defined, figure it out dynamically
+if ( ! defined( "BASE_URL" ) )
+{
+    $url = ( IS_SECURE_CONNECTION ? "https://" : "http://" ) . $_SERVER["HTTP_HOST"];
+
+    // just in case this implementation of HTTP_HOST doesn't include non-standard port numbers
+    if ( ! preg_match( '/:' . $_SERVER["SERVER_PORT"] . '$/', $url ) )
+    {
+        switch ( $_SERVER["SERVER_PORT"] )
+        {
+            case 80:
+
+                if ( IS_SECURE_CONNECTION )
+                {
+                    $url .= ":80";
+                }
+
+                break;
+
+            case 443:
+
+                if ( ! IS_SECURE_CONNECTION )
+                {
+                    $url .= ":443";
+                }
+
+                break;
+
+            default:
+
+                $url .= ":" . $_SERVER["SERVER_PORT"];
+
+                break;
+        }
+    }
+
+    // this works ONLY because we serve everything from index.php -- otherwise we'd need to do some additional jiggery-pokery
+    $url .= dirname( $_SERVER["SCRIPT_NAME"] );
+    define( "BASE_URL", $url );
+}
+
 /**
  * @return PDO
  */
