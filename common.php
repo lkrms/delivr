@@ -48,7 +48,13 @@ if ( ! defined( "BASE_URL" ) )
     }
 
     // this works ONLY because we serve everything from index.php -- otherwise we'd need to do some additional jiggery-pokery
-    $url .= dirname( $_SERVER["SCRIPT_NAME"] );
+    $dirname = dirname( $_SERVER["SCRIPT_NAME"] );
+
+    if ( $dirname != "/" )
+    {
+        $url .= $dirname;
+    }
+
     define( "BASE_URL", $url );
 }
 
