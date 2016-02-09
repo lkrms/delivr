@@ -1,2 +1,4 @@
-.store/db
+.htaccess
 config.php
+
+.store/db
