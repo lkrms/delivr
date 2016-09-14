@@ -102,6 +102,26 @@ class uploadPage extends delivrPage
 
         $q = $db->prepare( "INSERT INTO authorisations (auth_code, file_id) VALUES (:auth_code, :file_id)" );
         $q->execute( array( ":auth_code" => $this->AuthCode, ":file_id" => $this->Id ) );
+
+        // send an email confirmation
+        $message = "Hi,
+
+The following file was just uploaded via " . BASE_URL . " :
+
+IP address: $_SERVER[REMOTE_ADDR]
+Time: " . date( "j-M-Y G:i:s" ) . "
+
+File name: $this->Name ($this->Id)
+Size: $this->Size bytes
+MIME type: $this->MimeType
+
+Download link: " . GetDownloadUrl( $this->AuthCode ) . "
+
+Description:
+
+$this->Description
+";
+        mail( NOTIFY_EMAIL, "$this->Name was just uploaded", $message, "From: " . EMAIL_FROM );
     }
 }
 
