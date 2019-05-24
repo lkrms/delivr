@@ -63,7 +63,10 @@ if ( ! defined( "BASE_URL" ) )
  */
 function GetDb()
 {
-    return new PDO( "sqlite:" . DB_PATH );
+    $db = new PDO( "sqlite:" . DB_PATH );
+    $db->exec( "PRAGMA foreign_keys = ON" );
+
+    return $db;
 }
 
 function RedirectTo( $page )
